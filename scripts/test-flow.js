@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000';
+// Use environment-configured base URL or PORT so tests hit the actual server.
+const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
 const TEST_PHONE = '919999999999'; // Fake number for testing
 
 async function runTest() {

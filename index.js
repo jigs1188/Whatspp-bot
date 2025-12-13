@@ -165,20 +165,30 @@ async function sendMessage(to, text) {
     return;
   }
 
-  await axios.post(
-    `https://graph.facebook.com/${GRAPH_VERSION}/${process.env.PHONE_NUMBER_ID}/messages`,
-    {
-      messaging_product: "whatsapp",
-      to,
-      text: { body: text }
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-        "Content-Type": "application/json"
+  try {
+    await axios.post(
+      `https://graph.facebook.com/${GRAPH_VERSION}/${process.env.PHONE_NUMBER_ID}/messages`,
+      {
+        messaging_product: "whatsapp",
+        to,
+        text: { body: text }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+          "Content-Type": "application/json"
+        }
       }
+    );
+  } catch (err) {
+    // Log full axios error response for easier debugging (status, body)
+    if (err.response) {
+      console.error("WhatsApp API Error:", err.response.status, err.response.data);
+    } else {
+      console.error("WhatsApp API Error:", err.message);
     }
-  );
+    throw err; // rethrow to be handled by caller
+  }
 }
 
 app.listen(PORT, () => {
