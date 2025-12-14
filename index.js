@@ -19,6 +19,11 @@ app.use(bodyParser.json());
 // Connect to MongoDB
 connectDB();
 
+/* -------- Health Check -------- */
+app.get("/", (req, res) => {
+  res.send("🤖 WhatsApp Bot is running! (Go to /webhook for Meta)");
+});
+
 /* -------- Webhook Verification -------- */
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];

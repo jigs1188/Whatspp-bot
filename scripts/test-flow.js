@@ -1,11 +1,14 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Use environment-configured base URL or PORT so tests hit the actual server.
 const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
-const TEST_PHONE = '919999999999'; // Fake number for testing
+const TEST_PHONE = '919106764653'; // Fake number for testing
 
 async function runTest() {
-  console.log("🧪 Starting WhatsApp Bot Logic Test...\n");
+  console.log(`🧪 Starting WhatsApp Bot Logic Test against: ${BASE_URL}\n`);
 
   // 1. Simulate Incoming Message (New User)
   console.log("1️⃣  Simulating NEW USER message...");
@@ -25,7 +28,8 @@ async function runTest() {
     });
     console.log("   ✅ Webhook received message (Check server logs for RAG reply)");
   } catch (err) {
-    console.error("   ❌ Webhook failed:", err.message);
+    console.error(`   ❌ Webhook failed: ${err.message} (URL: ${BASE_URL}/webhook)`);
+    if (err.code === 'ECONNREFUSED') console.error("      👉 Is the server running? (npm run dev)");
   }
 
   // 2. Check Database State
